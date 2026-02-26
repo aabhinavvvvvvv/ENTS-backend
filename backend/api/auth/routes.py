@@ -75,11 +75,11 @@ def get_token():
 
         # Specify the CLIENT_ID of the app that requests data
         idinfo = id_token.verify_oauth2_token(
-            token, g_requests.Request(), config["clientId"]
+            token, g_requests.Request(), config["clientId"], clock_skew_in_seconds=10
         )
         email = idinfo["email"]
-        first_name = idinfo["given_name"]
-        last_name = idinfo["family_name"]
+        first_name = idinfo.get("given_name", "")
+        last_name = idinfo.get("family_name", "")
         user = User.query.filter_by(email=email).first()
 
         # Add user to DB if new user
